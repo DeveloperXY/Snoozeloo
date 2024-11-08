@@ -1,4 +1,4 @@
-package com.developerxy.snoozeloo.ui.theme
+package com.developerxy.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
