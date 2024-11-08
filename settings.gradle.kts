@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -27,6 +28,6 @@ include(":feature:alarmsettings")
 include(":feature:ringtonesettings")
 include(":feature:alarmtrigger")
 include(":core:designsystem")
-include(":core:domain")
 include(":core:data")
 include(":core:database")
+include(":core:domain")
