@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.core.splashscreen)
     implementation(projects.core.designsystem)
     implementation(projects.feature.youralarms)
     implementation(projects.feature.alarmsettings)

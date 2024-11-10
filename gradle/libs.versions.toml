@@ -13,6 +13,7 @@ material = "1.12.0"
 jetbrainsKotlinJvm = "1.9.0"
 navgiationCompose = "2.8.2"
 googleFonts = "1.7.5"
+splashScreen = "1.0.0"
 
 # Project versions
 projectApplicationId = "com.developerxy.snoozeloo"
@@ -44,6 +45,7 @@ google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", v
 
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
