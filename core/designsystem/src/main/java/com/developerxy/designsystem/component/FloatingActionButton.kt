@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,59 +18,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.developerxy.designsystem.SnoozelooButtonDefaults
 import com.developerxy.designsystem.icon.SnoozelooIcons
 
 @Composable
-fun SnoozelooIconButton(
+fun SnoozelooFab(
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
     icon: ImageVector,
-    contentDescription: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
-    val colors = SnoozelooButtonDefaults.colors()
-    val bgColor = colors.bgColor(enabled)
-    val iconTint = colors.iconTint(enabled)
     Box(
         modifier = modifier
-            .requiredSize(32.dp)
-            .background(bgColor, RoundedCornerShape(6.dp))
-            .clip(RoundedCornerShape(6.dp))
+            .requiredSize(60.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(percent = 50)
+            )
+            .clip(RoundedCornerShape(percent = 50))
             .clickable(
-                enabled = enabled,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
-                    color = Color.White, // Custom ripple color
-                    bounded = true, // Ripple confined to the shape
+                    color = Color.White,
+                    bounded = true,
                 ),
             ) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Icon(
+            modifier = Modifier.requiredSize(22.dp),
             imageVector = icon,
-            tint = iconTint,
-            contentDescription = contentDescription
+            tint = MaterialTheme.colorScheme.onPrimary,
+            contentDescription = null
         )
     }
 }
 
 @Preview
 @Composable
-fun SnoozelooIconButtonPreview() {
-    SnoozelooIconButton(
-        enabled = true,
-        icon = SnoozelooIcons.ArrowBack,
-        contentDescription = "Go back"
-    )
-}
-
-@Preview
-@Composable
-fun DisabledSnoozelooIconButtonPreview() {
-    SnoozelooIconButton(
-        enabled = false,
-        icon = SnoozelooIcons.Close,
-        contentDescription = "Close"
-    )
+fun SnoozelooFabPreview() {
+    SnoozelooFab(icon = SnoozelooIcons.Close) {}
 }

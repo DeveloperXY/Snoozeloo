@@ -19,6 +19,10 @@ fun MainAppNavigation(navController: NavHostController) {
 
 private fun NavGraphBuilder.addYourAlarms(navController: NavHostController) {
     composable(NavRoutes.YOUR_ALARMS) {
-        YourAlarmsScreen()
+        YourAlarmsScreen(
+            onCreateNewAlarm = {
+                navController.navigate(NavRoutes.ALARM_SETTINGS)
+            }
+        )
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.developerxy.designsystem.component.SnoozelooFab
 import com.developerxy.designsystem.icon.SnoozelooIcons
 import com.developerxy.youralarms.ui.AlarmsList
 import org.koin.androidx.compose.koinViewModel
@@ -30,7 +31,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun YourAlarmsScreen(
     modifier: Modifier = Modifier,
-    viewModel: YourAlarmsViewModel = koinViewModel()
+    viewModel: YourAlarmsViewModel = koinViewModel(),
+    onCreateNewAlarm: () -> Unit
 ) {
     val alarms by viewModel.alarms.collectAsStateWithLifecycle()
 
@@ -39,7 +41,7 @@ fun YourAlarmsScreen(
     }
 
     Scaffold { padding ->
-        Column(
+        Box(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -47,30 +49,40 @@ fun YourAlarmsScreen(
                     color = MaterialTheme.colorScheme.surface
                 )
         ) {
-            Text(
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp,
-                ),
-                text = stringResource(R.string.your_alarms),
-                style = MaterialTheme.typography.titleMedium
-                    .copy(
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                if (alarms.isEmpty()) {
-                    NoAlarmsView()
-                } else {
-                    AlarmsList(alarms = alarms)
+            Column {
+                Text(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
+                    ),
+                    text = stringResource(R.string.your_alarms),
+                    style = MaterialTheme.typography.titleMedium
+                        .copy(
+                            fontSize = 24.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (alarms.isEmpty()) {
+                        NoAlarmsView()
+                    } else {
+                        AlarmsList(alarms = alarms)
+                    }
                 }
             }
+
+            SnoozelooFab(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 32.dp),
+                icon = SnoozelooIcons.Add,
+                onClick = onCreateNewAlarm
+            )
         }
     }
 }
@@ -102,5 +114,5 @@ private fun NoAlarmsView(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun YourAlarmsScreenPreview(modifier: Modifier = Modifier) {
-    YourAlarmsScreen()
+    YourAlarmsScreen {}
 }
