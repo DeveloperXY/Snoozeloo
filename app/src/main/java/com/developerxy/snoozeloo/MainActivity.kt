@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.developerxy.designsystem.theme.AppTheme
+import com.developerxy.snoozeloo.ui.navigation.MainAppNavigation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -23,8 +25,9 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            AppTheme {
-
+            AppTheme(dynamicColor = false) {
+                val navHostController = rememberNavController()
+                MainAppNavigation(navController = navHostController)
             }
         }
     }

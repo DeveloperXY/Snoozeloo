@@ -14,11 +14,11 @@ private val lightScheme = lightColorScheme(
     primary = SnoozelooPrimaryBlue,
     onPrimary = Color.White,
     primaryContainer = SnoozelooLightBlueAccent,
-    onPrimaryContainer = Color.Black,
+    onPrimaryContainer = SnoozelooBlack,
     background = SnoozelooSoftBackgroundBlue,
     surface = SnoozelooNeutralBackgroundGray,
     onBackground = SnoozelooTextGray,
-    onSurface = Color.Black,
+    onSurface = SnoozelooBlack,
     outline = SnoozelooDividerGray
 )
 
