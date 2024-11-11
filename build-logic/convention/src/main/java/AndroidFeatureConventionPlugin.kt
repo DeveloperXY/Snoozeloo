@@ -13,8 +13,14 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 "implementation"(project(":core:ui"))
-                "implementation"(project(":core:domain"))
+                "implementation"(project(":core:data"))
                 "implementation"(project(":core:designsystem"))
+
+                "implementation"(platform(libs.findLibrary("koin.bom").get()))
+                "implementation"(libs.findLibrary("koin.core").get())
+                "implementation"(libs.findLibrary("koin.android").get())
+                "implementation"(libs.findLibrary("koin.androidx.compose").get())
+                "implementation"(libs.findLibrary("koin.androidx.navigation").get())
 
                 "implementation"(libs.findLibrary("androidx.core.ktx").get())
                 "implementation"(libs.findLibrary("androidx.appcompat").get())

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.6.1"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
+kotlinxCoroutines = "1.9.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -14,6 +15,9 @@ jetbrainsKotlinJvm = "1.9.0"
 navgiationCompose = "2.8.2"
 googleFonts = "1.7.5"
 splashScreen = "1.0.0"
+koin-bom = "4.0.0"
+room = "2.6.1"
+ksp = "2.0.20-1.0.25"
 
 # Project versions
 projectApplicationId = "com.developerxy.snoozeloo"
@@ -47,6 +51,21 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -54,8 +73,11 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-snoozeloo-android-feature = {id= "snoozeloo.android.feature", version="unspecified"}
-snoozeloo-android-library = {id= "snoozeloo.android.library", version="unspecified"}
-snoozeloo-android-library-compose = {id= "snoozeloo.android.library.compose", version="unspecified"}
-snoozeloo-android-application = {id= "snoozeloo.android.application", version="unspecified"}
-snoozeloo-android-application-compose = {id= "snoozeloo.android.application.compose", version="unspecified"}
+snoozeloo-android-feature = { id = "snoozeloo.android.feature", version = "unspecified" }
+snoozeloo-android-library = { id = "snoozeloo.android.library", version = "unspecified" }
+snoozeloo-android-library-compose = { id = "snoozeloo.android.library.compose", version = "unspecified" }
+snoozeloo-android-application = { id = "snoozeloo.android.application", version = "unspecified" }
+snoozeloo-android-application-compose = { id = "snoozeloo.android.application.compose", version = "unspecified" }
+
+room = { id = "androidx.room", version.ref = "room" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
