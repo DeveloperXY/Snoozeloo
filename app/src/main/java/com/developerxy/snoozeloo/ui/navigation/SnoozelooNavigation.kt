@@ -13,7 +13,7 @@ import com.developerxy.youralarms.YourAlarmsScreen
 fun MainAppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NavRoutes.ALARM_SETTINGS) {
+        startDestination = NavRoutes.YOUR_ALARMS) {
         addYourAlarms(navController)
         addAlarmSettings(navController)
     }
@@ -31,6 +31,10 @@ private fun NavGraphBuilder.addYourAlarms(navController: NavHostController) {
 
 private fun NavGraphBuilder.addAlarmSettings(navController: NavHostController) {
     composable(NavRoutes.ALARM_SETTINGS) {
-        AlarmSettingsScreen()
+        AlarmSettingsScreen(
+            navigateBack = {
+                navController.popBackStack()
+            }
+        )
     }
 }

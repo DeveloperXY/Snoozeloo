@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,7 @@ fun SnoozelooSwitch(
     modifier: Modifier = Modifier,
     checked: Boolean = false,
     size: SwitchSize = SwitchSize.MEDIUM,
-    onCheckedChange: (Boolean) -> Unit = {},
+    onCheckedChange: () -> Unit = {},
 ) {
     SnoozelooSwitchImpl(
         modifier = modifier,
@@ -41,7 +42,7 @@ private fun SnoozelooSwitchImpl(
     checked: Boolean,
     colors: SnoozelooSwitchColors = SnoozelooSwitchDefaults.colors(),
     size: SwitchSize,
-    onCheckedChange: (Boolean) -> Unit = {},
+    onCheckedChange: () -> Unit = {},
 ) {
     val outline = 2.dp
     val (trackWidth, trackHeight, thumbSize) = size
@@ -52,12 +53,14 @@ private fun SnoozelooSwitchImpl(
     val trackColor = colors.trackColor(checked = checked)
     val thumbColor = colors.thumbColor(checked = checked)
 
+    val newCallback = rememberUpdatedState(onCheckedChange)
+
     Box(
         modifier = Modifier
             .size(width = trackWidth.dp, height = trackHeight.dp)
             .background(trackColor, RoundedCornerShape(50))
             .pointerInput(Unit) {
-                detectTapGestures(onTap = { onCheckedChange(!checked) })
+                detectTapGestures(onTap = { onCheckedChange() })
             },
         contentAlignment = Alignment.CenterStart
     ) {

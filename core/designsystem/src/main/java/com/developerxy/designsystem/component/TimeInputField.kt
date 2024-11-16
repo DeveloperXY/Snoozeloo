@@ -1,11 +1,8 @@
 package com.developerxy.designsystem.component
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,10 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,15 +26,14 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TimeInputField(
     modifier: Modifier = Modifier,
-    text: TextFieldValue,
+    value: Int?,
     hint: String = "00",
     isFocused: Boolean = false,
-    hasNext: Boolean = false,
-    onTextChanged: (TextFieldValue) -> Unit,
+    imeAction: ImeAction,
+    keyboardActions: KeyboardActions,
+    onValueChanged: (Int?) -> Unit,
     focusRequester: FocusRequester? = null,
-    onFocusChanged: (FocusState) -> Unit = {},
-    onNext: () -> Unit = {},
-    onDone: () -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {},
     onValidateInput: (String) -> Boolean = { true },
 ) {
     val textStyle = MaterialTheme.typography.labelMedium.copy(
@@ -48,7 +42,7 @@ fun TimeInputField(
         textAlign = TextAlign.Center,
         color = MaterialTheme.colorScheme.primary
     )
-    val showHint = text.isEmpty() && !isFocused
+    val showHint = value == null && !isFocused
 
     Box(
         modifier = modifier
@@ -68,36 +62,42 @@ fun TimeInputField(
         BasicTextField(
             modifier = Modifier
                 .alpha(if (showHint) 0f else 1f)
-                .onFocusChanged(onFocusChanged)
+                .onFocusChanged {
+                    if (it.isFocused && !isFocused) {
+                        // Move the cursor to the far right
+                        onValueChanged(value)
+                    }
+
+                    onFocusChanged(it.isFocused)
+                }
                 .then(
                     if (focusRequester != null) Modifier.focusRequester(focusRequester)
                     else Modifier
                 ),
-            value = text,
+            value = run {
+                val stringValue = value?.toString().orEmpty()
+                TextFieldValue(
+                    if (isFocused) stringValue else stringValue.toPaddedTimeValue(),
+                    selection = TextRange(stringValue.length)
+                )
+            },
             onValueChange = {
                 val input = it.text
+
                 if (onValidateInput(input)) {
-                    val paddedInput = input.toPaddedTimeValue()
-                    onTextChanged(
-                        it.copy(
-                            text = paddedInput,
-                            selection = TextRange(paddedInput.length)
-                        )
+                    onValueChanged(
+                        input.toIntOrNull()
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(
+            keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
-                imeAction = if (hasNext) ImeAction.Next else ImeAction.Done
+                imeAction = imeAction
             ),
-            keyboardActions = KeyboardActions(
-                onDone = { onDone() },
-                onNext = { onNext() }
-            ),
+            keyboardActions = keyboardActions,
             textStyle = textStyle,
         )
     }
 }
 
-private fun TextFieldValue.isEmpty() = this.text.isEmpty()
-private fun String.toPaddedTimeValue() = padStart(2, '0')
+private fun String.toPaddedTimeValue() = if (isEmpty()) this else padStart(2, '0')

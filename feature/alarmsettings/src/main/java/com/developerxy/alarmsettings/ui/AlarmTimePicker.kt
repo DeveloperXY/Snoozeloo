@@ -1,9 +1,13 @@
 package com.developerxy.alarmsettings.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,9 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.FocusState
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.developerxy.designsystem.component.SnoozelooSurface
@@ -25,10 +29,11 @@ import com.developerxy.designsystem.component.TimeInputField
 @Composable
 fun AlarmTimePicker(
     modifier: Modifier = Modifier,
-    hoursText: TextFieldValue,
-    onHoursChanged: (TextFieldValue) -> Unit,
-    minutesText: TextFieldValue,
-    onMinutesChanged: (TextFieldValue) -> Unit,
+    hours: Int? = null,
+    onHoursChanged: (Int?) -> Unit,
+    minutes: Int? = null,
+    onMinutesChanged: (Int?) -> Unit,
+    alarmTimePreviewText: String? = null,
     onDone: () -> Unit,
     onShowKeyboard: () -> Unit
 ) {
@@ -37,7 +42,7 @@ fun AlarmTimePicker(
     var areHoursFocused by remember { mutableStateOf(false) }
     var areMinutesFocused by remember { mutableStateOf(false) }
 
-    SnoozelooSurface(modifier = modifier) {
+    SnoozelooSurface {
         Column(modifier = Modifier.padding(24.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -45,56 +50,61 @@ fun AlarmTimePicker(
             ) {
                 AlarmTimeInputField(
                     modifier = Modifier.weight(1f),
-                    hasNext = true,
                     isFocused = areHoursFocused,
-                    text = hoursText,
+                    value = hours,
                     focusRequester = hoursFocusRequester,
-                    onTextChanged = onHoursChanged,
+                    onValueChanged = onHoursChanged,
                     onValidateInput = { text -> text.shouldBeInHoursRange() },
-                    onNext = { minutesFocusRequester.requestFocus() },
-                    onFocusChanged = {
-                        if (it.isFocused && !areHoursFocused) {
+                    onFocusChanged = { isFocused ->
+                        if (isFocused && !areHoursFocused) {
                             onShowKeyboard()
-                            // Move the cursor to the far right
-                            onHoursChanged(
-                                hoursText.copy(
-                                    selection = TextRange(hoursText.text.length)
-                                )
-                            )
                         }
-                        areHoursFocused = it.isFocused
-                    }
+                        areHoursFocused = isFocused
+                    },
+                    imeAction = ImeAction.Next,
+                    keyboardActions = KeyboardActions(
+                        onNext = { minutesFocusRequester.requestFocus() }
+                    ),
                 )
 
                 Text(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = ":",
                     style = MaterialTheme.typography.labelMedium.copy(
-                        fontSize = 36.sp
+                        fontSize = 36.sp,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 )
 
                 AlarmTimeInputField(
                     modifier = Modifier.weight(1f),
-                    hasNext = false,
                     isFocused = areMinutesFocused,
-                    text = minutesText,
+                    value = minutes,
                     focusRequester = minutesFocusRequester,
-                    onTextChanged = onMinutesChanged,
+                    onValueChanged = onMinutesChanged,
                     onValidateInput = { text -> text.shouldBeInMinutesRange() },
-                    onDone = onDone,
-                    onFocusChanged = {
-                        if (it.isFocused && !areMinutesFocused) {
+                    onFocusChanged = { isFocused ->
+                        if (isFocused && !areMinutesFocused) {
                             onShowKeyboard()
-                            // Move the cursor to the far right
-                            onMinutesChanged(
-                                minutesText.copy(
-                                    selection = TextRange(minutesText.text.length)
-                                )
-                            )
                         }
-                        areMinutesFocused = it.isFocused
-                    }
+                        areMinutesFocused = isFocused
+                    },
+                    imeAction = ImeAction.Done,
+                    keyboardActions = KeyboardActions(
+                        onDone = { onDone() }
+                    ),
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            AnimatedVisibility(alarmTimePreviewText != null) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = alarmTimePreviewText.orEmpty(),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
                 )
             }
         }
@@ -104,15 +114,14 @@ fun AlarmTimePicker(
 @Composable
 private fun AlarmTimeInputField(
     modifier: Modifier = Modifier,
-    text: TextFieldValue,
+    value: Int?,
     hint: String = "00",
     isFocused: Boolean = false,
-    hasNext: Boolean = false,
-    onTextChanged: (TextFieldValue) -> Unit,
+    onValueChanged: (Int?) -> Unit,
     focusRequester: FocusRequester? = null,
-    onFocusChanged: (FocusState) -> Unit = {},
-    onNext: () -> Unit = {},
-    onDone: () -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {},
+    imeAction: ImeAction,
+    keyboardActions: KeyboardActions,
     onValidateInput: (String) -> Boolean = { true },
 ) {
     SnoozelooSurface(
@@ -121,15 +130,14 @@ private fun AlarmTimeInputField(
     ) {
         TimeInputField(
             hint = hint,
-            hasNext = hasNext,
             isFocused = isFocused,
-            text = text,
+            value = value,
             focusRequester = focusRequester,
-            onTextChanged = onTextChanged,
+            onValueChanged = onValueChanged,
             onValidateInput = onValidateInput,
-            onDone = onDone,
             onFocusChanged = onFocusChanged,
-            onNext = onNext,
+            imeAction = imeAction,
+            keyboardActions = keyboardActions,
         )
     }
 }
@@ -139,8 +147,5 @@ private fun String.shouldBeInMinutesRange() = shouldBeInRange(0..59)
 
 private fun String.shouldBeInRange(range: IntRange): Boolean {
     val number = toIntOrNull()
-    if (number == null || (number in range)) {
-        return true
-    }
-    return false
+    return number == null || (number in range)
 }

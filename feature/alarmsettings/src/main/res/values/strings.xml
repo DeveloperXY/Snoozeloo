@@ -2,4 +2,9 @@
 <resources>
     <string name="save">Save</string>
     <string name="close">Close</string>
+    <string name="alarm_name">Alarm name</string>
+    <string name="repeat">Repeat</string>
+    <string name="alarm_ringtone">Alarm ringtone</string>
+    <string name="alarm_volume">Alarm volume</string>
+    <string name="vibrate">Vibrate</string>
 </resources>
