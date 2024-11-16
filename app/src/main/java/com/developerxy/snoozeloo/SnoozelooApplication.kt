@@ -1,6 +1,7 @@
 package com.developerxy.snoozeloo
 
 import android.app.Application
+import com.developerxy.alarmsettings.di.alarmSettingsModule
 import com.developerxy.data.di.repositoryModule
 import com.developerxy.database.di.daoModule
 import com.developerxy.database.di.databaseModule
@@ -17,7 +18,7 @@ class SnoozelooApplication : Application() {
             androidLogger()
             androidContext(this@SnoozelooApplication)
 
-            val featureModules = arrayOf(yourAlarmsModule)
+            val featureModules = arrayOf(yourAlarmsModule, alarmSettingsModule)
             val dataModules = arrayOf(databaseModule, daoModule, repositoryModule)
 
             modules(*dataModules, *featureModules)

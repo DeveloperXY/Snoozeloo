@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.developerxy.alarmsettings.AlarmSettingsScreen
 import com.developerxy.ui.NavRoutes
 import com.developerxy.youralarms.YourAlarmsScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainAppNavigation(navController: NavHostController) {
@@ -32,6 +33,7 @@ private fun NavGraphBuilder.addYourAlarms(navController: NavHostController) {
 private fun NavGraphBuilder.addAlarmSettings(navController: NavHostController) {
     composable(NavRoutes.ALARM_SETTINGS) {
         AlarmSettingsScreen(
+            viewModel = koinViewModel(),
             navigateBack = {
                 navController.popBackStack()
             }

@@ -13,11 +13,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -33,28 +32,24 @@ import com.developerxy.alarmsettings.ui.AlarmVolume
 import com.developerxy.alarmsettings.ui.RepeatAlarm
 import com.developerxy.alarmsettings.ui.Vibrate
 import com.developerxy.alarmsettings.ui.dialog.AlarmNameDialog
-import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun AlarmSettingsScreen(
     modifier: Modifier = Modifier,
-    navigateBack: () -> Unit = {}
+    navigateBack: () -> Unit = {},
+    viewModel: AlarmSettingsViewModel
 ) {
+    val hours by viewModel.hours.collectAsState()
+    val volume by viewModel.volume.collectAsState()
+    val minutes by viewModel.minutes.collectAsState()
+    val alarmName by viewModel.alarmName.collectAsState()
+    val selectedDays by viewModel.selectedDays.collectAsState()
+    val vibrate by viewModel.shouldAlarmVibrate.collectAsState()
+    val saveEnabled by viewModel.isAlarmInfoValid.collectAsState()
+    val alarmTimePreviewText by viewModel.alarmTimePreviewText.collectAsState()
+
     val scrollState = rememberScrollState()
-    var closeEnabled by rememberSaveable { mutableStateOf(true) }
-    var saveEnabled by rememberSaveable { mutableStateOf(false) }
-
-    var hours by remember { mutableStateOf<Int?>(null) }
-    var minutes by remember { mutableStateOf<Int?>(null) }
-    var selectedDays by remember { mutableStateOf<List<Int>>(listOf()) }
-
-    var volume by remember { mutableStateOf(0) }
-    var vibrate by rememberSaveable { mutableStateOf(true) }
-
     var showAlarmNameDialog by remember { mutableStateOf(false) }
-    var alarmName by remember { mutableStateOf("My alarm") }
-    var alarmTimePreviewText by remember { mutableStateOf<String?>(null) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager: FocusManager = LocalFocusManager.current
@@ -74,27 +69,16 @@ fun AlarmSettingsScreen(
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
                 ActionBar(
-                    closeEnabled = closeEnabled,
                     saveEnabled = saveEnabled,
                     onClose = navigateBack
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
-                LaunchedEffect(hours, minutes) {
-                    val isAlarmTimeValid = hours != null && minutes != null
-                    alarmTimePreviewText = if (isAlarmTimeValid) {
-                        getRelativeAlarmTime(hours!!, minutes!!)
-                    } else {
-                        null
-                    }
-
-                    saveEnabled = isAlarmTimeValid
-                }
                 AlarmTimePicker(
                     hours = hours,
-                    onHoursChanged = { hours = it },
+                    onHoursChanged = viewModel::setHours,
                     minutes = minutes,
-                    onMinutesChanged = { minutes = it },
+                    onMinutesChanged = viewModel::setMinutes,
                     alarmTimePreviewText = alarmTimePreviewText,
                     onShowKeyboard = { keyboardController?.show() },
                     onDone = {
@@ -113,35 +97,27 @@ fun AlarmSettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 RepeatAlarm(
                     selectedDays = selectedDays.toIntArray(),
-                    onDaySelected = {
-                        selectedDays = selectedDays + it
-                    },
-                    onDayUnselected = {
-                        selectedDays = selectedDays - it
-                    }
+                    onDaySelected = viewModel::selectDay,
+                    onDayUnselected = viewModel::unselectDay
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AlarmRingtone(text = "Default")
                 Spacer(modifier = Modifier.height(16.dp))
                 AlarmVolume(
                     volume = volume,
-                    onVolumeChanged = {
-                        volume = it
-                    }
+                    onVolumeChanged = viewModel::setVolume
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Vibrate(
                     enabled = vibrate,
-                    onToggleVibrate = {
-                        vibrate = !vibrate
-                    }
+                    onToggleVibrate = viewModel::toggleShouldAlarmVibrate
                 )
             }
 
             if (showAlarmNameDialog) {
                 AlarmNameDialog(
                     initialAlarmName = alarmName,
-                    onAlarmNameChanged = { alarmName = it },
+                    onAlarmNameChanged = viewModel::setAlarmName,
                     onDismiss = { showAlarmNameDialog = false }
                 )
             }
@@ -149,33 +125,9 @@ fun AlarmSettingsScreen(
     }
 }
 
-private fun getRelativeAlarmTime(hours: Int, minutes: Int): String {
-    val now = Calendar.getInstance()
-    val currentHour = now.get(Calendar.HOUR_OF_DAY)
-    val currentMinute = now.get(Calendar.MINUTE)
-
-    val alarmTimeInMinutes = hours * 60 + minutes
-    val currentTimeInMinutes = currentHour * 60 + currentMinute
-
-    val differenceInMinutes = if (alarmTimeInMinutes >= currentTimeInMinutes) {
-        alarmTimeInMinutes - currentTimeInMinutes
-    } else {
-        // If the alarm time is for the next day
-        (24 * 60) - currentTimeInMinutes + alarmTimeInMinutes
-    }
-
-    val diffHours = TimeUnit.MINUTES.toHours(differenceInMinutes.toLong()).toInt()
-    val diffMinutes = (differenceInMinutes % 60)
-
-    return buildString {
-        append("Alarm in ")
-        if (diffHours > 0) append("${diffHours}h ")
-        if (diffMinutes > 0) append("${diffMinutes}min")
-    }.trim()
-}
-
 @Preview
 @Composable
 fun AlarmSettingsScreenPreview(modifier: Modifier = Modifier) {
-    AlarmSettingsScreen()
+    val viewModel = AlarmSettingsViewModel()
+    AlarmSettingsScreen(viewModel = viewModel)
 }

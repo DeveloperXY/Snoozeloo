@@ -15,7 +15,7 @@ import com.developerxy.designsystem.icon.SnoozelooIcons
 @Composable
 internal fun ActionBar(
     modifier: Modifier = Modifier,
-    closeEnabled: Boolean = false,
+    closeEnabled: Boolean = true,
     saveEnabled: Boolean = false,
     onClose: () -> Unit = {},
     onSave: () -> Unit = {}
