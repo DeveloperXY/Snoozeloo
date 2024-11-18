@@ -6,7 +6,6 @@ import com.developerxy.youralarms.domain.FetchYourAlarmsUseCase
 import com.developerxy.youralarms.ui.model.Alarm
 import com.developerxy.youralarms.ui.model.asUiModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,10 +19,8 @@ class YourAlarmsViewModel(
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms.asStateFlow()
 
-    private var alarmCollectionJob: Job? = null
-
     fun loadAlarms() {
-        alarmCollectionJob = viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchYourAlarms().map {
                 it.map { it.asUiModel() }
             }.collect { alarms ->
@@ -32,9 +29,5 @@ class YourAlarmsViewModel(
                 }
             }
         }
-    }
-
-    override fun onCleared() {
-        alarmCollectionJob?.cancel()
     }
 }

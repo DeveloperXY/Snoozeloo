@@ -1,9 +1,9 @@
-package com.developerxy.ringtonesettings.domain
+package com.developerxy.domain
 
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
-import com.developerxy.ringtonesettings.domain.model.RingtoneInfo
+import com.developerxy.model.RingtoneInfo
 
 class FetchDefaultRingtonesUseCase(private val context: Context) {
     operator fun invoke(): List<RingtoneInfo> {
@@ -19,7 +19,7 @@ class FetchDefaultRingtonesUseCase(private val context: Context) {
             val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX)
             val uri = Uri.parse("$uriString/$id")
 
-            ringtoneList.add(RingtoneInfo(title, uri))
+            ringtoneList.add(RingtoneInfo(id, title, uri))
         }
 
         return ringtoneList

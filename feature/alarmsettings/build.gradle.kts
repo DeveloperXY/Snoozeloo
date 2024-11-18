@@ -7,7 +7,3 @@ plugins {
 android {
     namespace = "com.developerxy.alarmsettings"
 }
-
-dependencies {
-    implementation(projects.feature.ringtonesettings)
-}

@@ -32,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 fun YourAlarmsScreen(
     modifier: Modifier = Modifier,
     viewModel: YourAlarmsViewModel = koinViewModel(),
-    onCreateNewAlarm: () -> Unit
+    onCreateNewAlarm: () -> Unit,
 ) {
     val alarms by viewModel.alarms.collectAsStateWithLifecycle()
 
@@ -114,5 +114,7 @@ private fun NoAlarmsView(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun YourAlarmsScreenPreview(modifier: Modifier = Modifier) {
-    YourAlarmsScreen {}
+    YourAlarmsScreen(
+        onCreateNewAlarm = {},
+    )
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,12 +33,16 @@ import com.developerxy.alarmsettings.ui.AlarmVolume
 import com.developerxy.alarmsettings.ui.RepeatAlarm
 import com.developerxy.alarmsettings.ui.Vibrate
 import com.developerxy.alarmsettings.ui.dialog.AlarmNameDialog
+import com.developerxy.ui.RingtonesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AlarmSettingsScreen(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit = {},
-    viewModel: AlarmSettingsViewModel
+    onShowRingtonesList: () -> Unit = {},
+    viewModel: AlarmSettingsViewModel = koinViewModel(),
+    ringtonesViewModel: RingtonesViewModel = koinViewModel()
 ) {
     val hours by viewModel.hours.collectAsState()
     val volume by viewModel.volume.collectAsState()
@@ -47,6 +52,7 @@ fun AlarmSettingsScreen(
     val vibrate by viewModel.shouldAlarmVibrate.collectAsState()
     val saveEnabled by viewModel.isAlarmInfoValid.collectAsState()
     val alarmTimePreviewText by viewModel.alarmTimePreviewText.collectAsState()
+    val selectedRingtone by ringtonesViewModel.selectedRingtone.collectAsState()
 
     val scrollState = rememberScrollState()
     var showAlarmNameDialog by remember { mutableStateOf(false) }
@@ -101,7 +107,12 @@ fun AlarmSettingsScreen(
                     onDayUnselected = viewModel::unselectDay
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                AlarmRingtone(text = "Default")
+                AlarmRingtone(
+                    modifier = Modifier.clickable {
+                        onShowRingtonesList()
+                    },
+                    text = selectedRingtone.title
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 AlarmVolume(
                     volume = volume,
@@ -128,6 +139,5 @@ fun AlarmSettingsScreen(
 @Preview
 @Composable
 fun AlarmSettingsScreenPreview(modifier: Modifier = Modifier) {
-    val viewModel = AlarmSettingsViewModel()
-    AlarmSettingsScreen(viewModel = viewModel)
+    AlarmSettingsScreen()
 }
