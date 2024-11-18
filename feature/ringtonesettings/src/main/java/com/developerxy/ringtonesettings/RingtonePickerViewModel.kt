@@ -40,8 +40,4 @@ class RingtonePickerViewModel : ViewModel() {
 
         mediaPlayer.release()
     }
-
-    override fun onCleared() {
-        stopAlarmPreview()
-    }
 }
