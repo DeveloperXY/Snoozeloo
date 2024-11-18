@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,7 @@ fun RingtonePickerScreen(
             }.collect()
     }
 
+    val context = LocalContext.current
     val ringtones by ringtonePickerViewModel.ringtones.collectAsState()
 
     Scaffold(modifier = modifier) { padding ->
@@ -81,6 +83,7 @@ fun RingtonePickerScreen(
                             ringtone = ringtones[it],
                             onPressed = {
                                 ringtonesViewModel.selectRingtone(ringtones[it].id)
+                                ringtonePickerViewModel.playAlarmSoundPreview(ringtones[it], context)
                             }
                         )
                     }
