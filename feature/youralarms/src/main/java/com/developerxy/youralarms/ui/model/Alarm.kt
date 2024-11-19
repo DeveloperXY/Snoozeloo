@@ -8,7 +8,7 @@ data class Alarm(
     val selectedDays: Byte,
     val volume: Int,
     val vibrate: Boolean,
-    val ringtone: String
+    val ringtoneUri: String?
 )
 
 data class AlarmTime(
@@ -22,5 +22,5 @@ fun DomainAlarm.asUiModel() = Alarm(
     selectedDays = selectedDays,
     volume = volume,
     vibrate = vibrate,
-    ringtone = ringtone
+    ringtoneUri = ringtoneUri
 )

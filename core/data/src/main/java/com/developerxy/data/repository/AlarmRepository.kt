@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
     fun getAllAlarms(): Flow<List<Alarm>>
+    suspend fun addAlarm(alarm: Alarm)
 }

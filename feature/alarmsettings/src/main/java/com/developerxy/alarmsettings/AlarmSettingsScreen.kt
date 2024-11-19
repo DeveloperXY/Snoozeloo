@@ -34,24 +34,28 @@ import com.developerxy.alarmsettings.ui.RepeatAlarm
 import com.developerxy.alarmsettings.ui.Vibrate
 import com.developerxy.alarmsettings.ui.dialog.AlarmNameDialog
 import com.developerxy.ui.RingtonesViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.mapLatest
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun AlarmSettingsScreen(
     modifier: Modifier = Modifier,
     navigateBack: () -> Unit = {},
     onShowRingtonesList: () -> Unit = {},
-    viewModel: AlarmSettingsViewModel = koinViewModel(),
+    alarmSettingsViewModel: AlarmSettingsViewModel = koinViewModel(),
     ringtonesViewModel: RingtonesViewModel = koinViewModel()
 ) {
-    val hours by viewModel.hours.collectAsState()
-    val volume by viewModel.volume.collectAsState()
-    val minutes by viewModel.minutes.collectAsState()
-    val alarmName by viewModel.alarmName.collectAsState()
-    val selectedDays by viewModel.selectedDays.collectAsState()
-    val vibrate by viewModel.shouldAlarmVibrate.collectAsState()
-    val saveEnabled by viewModel.isAlarmInfoValid.collectAsState()
-    val alarmTimePreviewText by viewModel.alarmTimePreviewText.collectAsState()
+    val hours by alarmSettingsViewModel.hours.collectAsState()
+    val volume by alarmSettingsViewModel.volume.collectAsState()
+    val minutes by alarmSettingsViewModel.minutes.collectAsState()
+    val alarmName by alarmSettingsViewModel.alarmName.collectAsState()
+    val selectedDays by alarmSettingsViewModel.selectedDays.collectAsState()
+    val vibrate by alarmSettingsViewModel.shouldAlarmVibrate.collectAsState()
+    val saveEnabled by alarmSettingsViewModel.isAlarmInfoValid.collectAsState()
+    val alarmTimePreviewText by alarmSettingsViewModel.alarmTimePreviewText.collectAsState()
     val selectedRingtone by ringtonesViewModel.selectedRingtone.collectAsState()
 
     val scrollState = rememberScrollState()
@@ -59,6 +63,13 @@ fun AlarmSettingsScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager: FocusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        ringtonesViewModel.selectedRingtone
+            .mapLatest { selectedRingtone ->
+                alarmSettingsViewModel.setSelectedRingtone(selectedRingtone)
+            }.collect()
+    }
 
     Scaffold(modifier = modifier) { padding ->
         Box(
@@ -76,15 +87,16 @@ fun AlarmSettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 ActionBar(
                     saveEnabled = saveEnabled,
-                    onClose = navigateBack
+                    onClose = navigateBack,
+                    onSave = alarmSettingsViewModel::saveNewAlarm
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
                 AlarmTimePicker(
                     hours = hours,
-                    onHoursChanged = viewModel::setHours,
+                    onHoursChanged = alarmSettingsViewModel::setHours,
                     minutes = minutes,
-                    onMinutesChanged = viewModel::setMinutes,
+                    onMinutesChanged = alarmSettingsViewModel::setMinutes,
                     alarmTimePreviewText = alarmTimePreviewText,
                     onShowKeyboard = { keyboardController?.show() },
                     onDone = {
@@ -103,8 +115,8 @@ fun AlarmSettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 RepeatAlarm(
                     selectedDays = selectedDays.toIntArray(),
-                    onDaySelected = viewModel::selectDay,
-                    onDayUnselected = viewModel::unselectDay
+                    onDaySelected = alarmSettingsViewModel::selectDay,
+                    onDayUnselected = alarmSettingsViewModel::unselectDay
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AlarmRingtone(
@@ -116,19 +128,19 @@ fun AlarmSettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 AlarmVolume(
                     volume = volume,
-                    onVolumeChanged = viewModel::setVolume
+                    onVolumeChanged = alarmSettingsViewModel::setVolume
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Vibrate(
                     enabled = vibrate,
-                    onToggleVibrate = viewModel::toggleShouldAlarmVibrate
+                    onToggleVibrate = alarmSettingsViewModel::toggleShouldAlarmVibrate
                 )
             }
 
             if (showAlarmNameDialog) {
                 AlarmNameDialog(
                     initialAlarmName = alarmName,
-                    onAlarmNameChanged = viewModel::setAlarmName,
+                    onAlarmNameChanged = alarmSettingsViewModel::setAlarmName,
                     onDismiss = { showAlarmNameDialog = false }
                 )
             }

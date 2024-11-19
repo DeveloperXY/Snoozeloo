@@ -1,13 +1,13 @@
 package com.developerxy.model
 
 data class Alarm(
-    val id: Int,
+    val id: Int = 0,
     val name: String,
     val time: AlarmTime,
     val selectedDays: Byte,
     val volume: Int,
     val vibrate: Boolean,
-    val ringtone: String = "Default"
+    val ringtoneUri: String?
 )
 
 data class AlarmTime(

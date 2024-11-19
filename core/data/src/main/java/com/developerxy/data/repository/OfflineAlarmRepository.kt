@@ -3,6 +3,7 @@ package com.developerxy.data.repository
 import com.developerxy.database.dao.AlarmDao
 import com.developerxy.database.entity.AlarmEntity
 import com.developerxy.database.entity.asDomainModel
+import com.developerxy.database.entity.toDatabaseEntity
 import com.developerxy.model.Alarm
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,4 +15,8 @@ internal class OfflineAlarmRepository(
         .map {
             it.map(AlarmEntity::asDomainModel)
         }
+
+    override suspend fun addAlarm(alarm: Alarm) {
+        alarmDao.insertAll(alarm.toDatabaseEntity())
+    }
 }

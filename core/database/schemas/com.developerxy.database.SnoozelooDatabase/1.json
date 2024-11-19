@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3a30687ca590eccbd619331d14e8d78e",
+    "identityHash": "820014af05115929f10b627f7e4daf50",
     "entities": [
       {
         "tableName": "alarms",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `selectedDays` INTEGER NOT NULL, `volume` INTEGER NOT NULL, `vibrate` INTEGER NOT NULL, `ringtone` TEXT NOT NULL, `hours` INTEGER NOT NULL, `minutes` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `selectedDays` INTEGER NOT NULL, `volume` INTEGER NOT NULL, `vibrate` INTEGER NOT NULL, `ringtoneUri` TEXT, `hours` INTEGER NOT NULL, `minutes` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,10 +39,10 @@
             "notNull": true
           },
           {
-            "fieldPath": "ringtone",
-            "columnName": "ringtone",
+            "fieldPath": "ringtoneUri",
+            "columnName": "ringtoneUri",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "time.hours",
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a30687ca590eccbd619331d14e8d78e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '820014af05115929f10b627f7e4daf50')"
     ]
   }
 }

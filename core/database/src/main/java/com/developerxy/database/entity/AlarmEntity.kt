@@ -8,14 +8,14 @@ import com.developerxy.model.AlarmTime
 
 @Entity(tableName = "alarms")
 data class AlarmEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     @Embedded
     val time: AlarmTimeEntity,
     val selectedDays: Byte,
     val volume: Int,
     val vibrate: Boolean,
-    val ringtone: String = "Default"
+    val ringtoneUri: String?
 )
 
 data class AlarmTimeEntity(
@@ -30,5 +30,14 @@ fun AlarmEntity.asDomainModel() = Alarm(
     selectedDays = selectedDays,
     volume = volume,
     vibrate = vibrate,
-    ringtone = ringtone
+    ringtoneUri = ringtoneUri
+)
+
+fun Alarm.toDatabaseEntity() = AlarmEntity(
+    name = name,
+    time = AlarmTimeEntity(hours = time.hours, minutes = time.minutes),
+    selectedDays = selectedDays,
+    volume = volume,
+    vibrate = vibrate,
+    ringtoneUri = ringtoneUri
 )

@@ -2,6 +2,11 @@ package com.developerxy.alarmsettings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.developerxy.data.repository.AlarmRepository
+import com.developerxy.model.Alarm
+import com.developerxy.model.AlarmTime
+import com.developerxy.model.RingtoneInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -9,7 +14,9 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-class AlarmSettingsViewModel : ViewModel() {
+class AlarmSettingsViewModel(
+    private val alarmRepository: AlarmRepository
+) : ViewModel() {
     /**
      * This flag indicates whether the totality of alarm info currently set are valid
      * and an alarm could be created or updated based on these info.
@@ -31,6 +38,16 @@ class AlarmSettingsViewModel : ViewModel() {
     val shouldAlarmVibrate = _shouldAlarmVibrate.asStateFlow()
     private val _selectedDays = MutableStateFlow(listOf<Int>())
     val selectedDays = _selectedDays.asStateFlow()
+
+    private lateinit var _selectedRingtone: MutableStateFlow<RingtoneInfo>
+
+    fun setSelectedRingtone(ringtone: RingtoneInfo) {
+        if (!this::_selectedRingtone.isInitialized) {
+            _selectedRingtone = MutableStateFlow(ringtone)
+        } else {
+            _selectedRingtone.value = ringtone
+        }
+    }
 
     init {
         viewModelScope.launch {
@@ -98,5 +115,33 @@ class AlarmSettingsViewModel : ViewModel() {
         } else {
             null
         }
+    }
+
+    @Suppress("NAME_SHADOWING")
+    fun saveNewAlarm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val alarmTime = hours.value?.let { hours ->
+                minutes.value?.let { minutes ->
+                    AlarmTime(hours, minutes)
+                }
+            }
+
+            alarmTime?.let { alarmTime ->
+                val newAlarm = Alarm(
+                    name = alarmName.value,
+                    time = alarmTime,
+                    selectedDays = selectedDays.value.asByte(),
+                    volume = volume.value,
+                    vibrate = shouldAlarmVibrate.value,
+                    ringtoneUri = _selectedRingtone.value.uri.toString()
+                )
+                alarmRepository.addAlarm(newAlarm)
+            }
+        }
+    }
+
+    private fun List<Int>.asByte(): Byte {
+        require(size <= 8) { "Byte can only represent up to 8 bits." }
+        return fold(0) { acc, bit -> acc or (1 shl bit) }.toByte()
     }
 }

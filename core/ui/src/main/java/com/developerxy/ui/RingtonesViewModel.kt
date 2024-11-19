@@ -22,12 +22,7 @@ class RingtonesViewModel(
     val ringtones = _ringtones.asStateFlow()
 
     init {
-        println("RingtonesViewModel created")
         loadRingtones()
-    }
-
-    override fun onCleared() {
-        println("RingtonesViewModel destroyed")
     }
 
     fun loadRingtones() {
