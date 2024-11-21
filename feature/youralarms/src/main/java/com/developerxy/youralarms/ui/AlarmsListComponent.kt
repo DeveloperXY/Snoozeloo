@@ -13,16 +13,20 @@ import com.developerxy.youralarms.ui.model.Alarm
 @Composable
 fun AlarmsList(
     modifier: Modifier = Modifier,
-    alarms: List<Alarm>
+    alarms: List<Alarm>,
+    onToggleAlarmActiveState: (alarm: Alarm) -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(alarms.size) {
+        items(alarms.size, key = { alarms[it].id }) {
             Alarm(
                 modifier = modifier.padding(horizontal = 16.dp),
-                alarm = alarms[it]
+                alarm = alarms[it],
+                onToggleAlarmActiveState = {
+                    onToggleAlarmActiveState(alarms[it])
+                }
             )
         }
     }

@@ -7,7 +7,8 @@ data class Alarm(
     val selectedDays: Byte,
     val volume: Int,
     val vibrate: Boolean,
-    val ringtoneUri: String?
+    val ringtoneUri: String?,
+    val isActive: Boolean
 )
 
 data class AlarmTime(

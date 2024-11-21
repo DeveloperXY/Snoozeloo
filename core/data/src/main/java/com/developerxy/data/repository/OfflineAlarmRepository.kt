@@ -19,4 +19,9 @@ internal class OfflineAlarmRepository(
     override suspend fun addAlarm(alarm: Alarm) {
         alarmDao.insertAll(alarm.toDatabaseEntity())
     }
+
+    override suspend fun updateAlarm(alarm: Alarm) {
+        val result = alarmDao.update(alarm.toDatabaseEntity())
+        println(result)
+    }
 }

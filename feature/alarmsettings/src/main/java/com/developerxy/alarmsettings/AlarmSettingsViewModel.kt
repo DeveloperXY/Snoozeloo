@@ -135,7 +135,8 @@ class AlarmSettingsViewModel(
                     selectedDays = selectedDays.value.asByte(),
                     volume = volume.value,
                     vibrate = shouldAlarmVibrate.value,
-                    ringtoneUri = _selectedRingtone.value.uri.toString()
+                    ringtoneUri = _selectedRingtone.value.uri.toString(),
+                    isActive = true
                 )
                 alarmRepository.addAlarm(newAlarm)
                 withContext(Dispatchers.Main) {

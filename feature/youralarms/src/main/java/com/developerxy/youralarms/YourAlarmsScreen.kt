@@ -45,7 +45,8 @@ fun YourAlarmsScreen(
     YourAlarmsScreenContent(
         modifier = modifier,
         alarms = alarms,
-        onCreateNewAlarm = onCreateNewAlarm
+        onCreateNewAlarm = onCreateNewAlarm,
+        onToggleAlarmActiveState = viewModel::toggleAlarmActiveState
     )
 }
 
@@ -54,6 +55,7 @@ fun YourAlarmsScreenContent(
     modifier: Modifier = Modifier,
     alarms: List<Alarm>,
     onCreateNewAlarm: () -> Unit = {},
+    onToggleAlarmActiveState: (Alarm) -> Unit = {},
 ) {
     Scaffold { padding ->
         Box(
@@ -86,7 +88,10 @@ fun YourAlarmsScreenContent(
                     if (alarms.isEmpty()) {
                         NoAlarmsView()
                     } else {
-                        AlarmsList(alarms = alarms)
+                        AlarmsList(
+                            alarms = alarms,
+                            onToggleAlarmActiveState = onToggleAlarmActiveState
+                        )
                     }
                 }
             }

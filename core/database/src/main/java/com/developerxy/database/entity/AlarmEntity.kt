@@ -15,7 +15,8 @@ data class AlarmEntity(
     val selectedDays: Byte,
     val volume: Int,
     val vibrate: Boolean,
-    val ringtoneUri: String?
+    val ringtoneUri: String?,
+    val isActive: Boolean
 )
 
 data class AlarmTimeEntity(
@@ -30,14 +31,17 @@ fun AlarmEntity.asDomainModel() = Alarm(
     selectedDays = selectedDays,
     volume = volume,
     vibrate = vibrate,
-    ringtoneUri = ringtoneUri
+    ringtoneUri = ringtoneUri,
+    isActive = isActive
 )
 
 fun Alarm.toDatabaseEntity() = AlarmEntity(
+    id = id,
     name = name,
     time = AlarmTimeEntity(hours = time.hours, minutes = time.minutes),
     selectedDays = selectedDays,
     volume = volume,
     vibrate = vibrate,
-    ringtoneUri = ringtoneUri
+    ringtoneUri = ringtoneUri,
+    isActive = isActive,
 )

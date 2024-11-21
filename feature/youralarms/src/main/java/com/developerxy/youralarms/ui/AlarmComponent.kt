@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +31,12 @@ import com.developerxy.youralarms.ui.model.Alarm as AlarmInfo
 @Composable
 fun Alarm(
     modifier: Modifier = Modifier,
-    alarm: AlarmInfo
+    alarm: AlarmInfo,
+    onToggleAlarmActiveState: () -> Unit = {}
 ) {
+    println(alarm)
+    val currentOnToggleAlarmActiveState by rememberUpdatedState(onToggleAlarmActiveState)
+
     SnoozelooSurface(modifier = modifier) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -70,17 +76,26 @@ fun Alarm(
                             )
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        "Alarm in 30min", style = MaterialTheme.typography.labelMedium.copy(
-                            color = SnoozelooTextGray,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
+
+                    if (alarm.isActive) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "Alarm in 30min", style = MaterialTheme.typography.labelMedium.copy(
+                                color = SnoozelooTextGray,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
                         )
-                    )
+                    }
                 }
 
-                SnoozelooSwitch()
+                SnoozelooSwitch(
+                    checked = alarm.isActive,
+                    onCheckedChange = {
+                        println(alarm)
+                        currentOnToggleAlarmActiveState()
+                    }
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
@@ -98,13 +113,16 @@ fun Alarm(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                "Go to bed at 02:00AM to get 8h of sleep",
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
+
+            if (alarm.isActive) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    "Go to bed at 02:00AM to get 8h of sleep",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
+                    )
                 )
-            )
+            }
         }
     }
 }
