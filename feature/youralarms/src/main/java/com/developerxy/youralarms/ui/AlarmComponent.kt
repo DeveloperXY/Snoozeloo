@@ -37,7 +37,6 @@ fun Alarm(
     alarm: AlarmInfo,
     onToggleAlarmActiveState: () -> Unit = {}
 ) {
-    println(alarm)
     val currentOnToggleAlarmActiveState by rememberUpdatedState(onToggleAlarmActiveState)
 
     SnoozelooSurface(modifier = modifier) {

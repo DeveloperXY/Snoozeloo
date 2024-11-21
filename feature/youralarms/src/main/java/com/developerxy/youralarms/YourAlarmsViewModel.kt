@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.developerxy.ui.amOrPm
 import com.developerxy.ui.formatAsDisplayTime
 import com.developerxy.ui.toSelectedDaysList
+import com.developerxy.youralarms.domain.DeleteAlarmUseCase
 import com.developerxy.youralarms.domain.FetchYourAlarmsUseCase
 import com.developerxy.youralarms.domain.ToggleAlarmActiveStateUseCase
 import com.developerxy.youralarms.ui.model.Alarm
@@ -26,6 +27,7 @@ import com.developerxy.model.Alarm as DomainAlarm
 open class YourAlarmsViewModel(
     private val _fetchYourAlarms: FetchYourAlarmsUseCase,
     private val _toggleAlarmActiveState: ToggleAlarmActiveStateUseCase,
+    private val _deleteAlarm: DeleteAlarmUseCase,
 ) : ViewModel() {
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())
     val alarms: StateFlow<List<Alarm>> = _alarms.asStateFlow()
@@ -54,6 +56,12 @@ open class YourAlarmsViewModel(
     fun toggleAlarmActiveState(alarm: Alarm) {
         viewModelScope.launch {
             _toggleAlarmActiveState(alarm.asDomainModel())
+        }
+    }
+
+    fun deleteAlarm(alarm: Alarm) {
+        viewModelScope.launch {
+            _deleteAlarm(alarm.asDomainModel())
         }
     }
 

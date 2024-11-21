@@ -7,6 +7,7 @@ import com.developerxy.designsystem.icon.definition.ArrowBack as ArrowBackIcon
 import com.developerxy.designsystem.icon.definition.Check as CheckIcon
 import com.developerxy.designsystem.icon.definition.Close as CloseIcon
 import com.developerxy.designsystem.icon.definition.Silent as SilentIcon
+import com.developerxy.designsystem.icon.definition.Bin as BinIcon
 
 object SnoozelooIcons {
     val Alarm = AlarmIcon
@@ -16,4 +17,5 @@ object SnoozelooIcons {
     val Bell = RingingBell
     val Silent = SilentIcon
     val Check = CheckIcon
+    val Bin = BinIcon
 }

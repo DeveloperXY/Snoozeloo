@@ -46,7 +46,8 @@ fun YourAlarmsScreen(
         modifier = modifier,
         alarms = alarms,
         onCreateNewAlarm = onCreateNewAlarm,
-        onToggleAlarmActiveState = viewModel::toggleAlarmActiveState
+        onDeleteAlarm = viewModel::deleteAlarm,
+        onToggleAlarmActiveState = viewModel::toggleAlarmActiveState,
     )
 }
 
@@ -55,6 +56,7 @@ fun YourAlarmsScreenContent(
     modifier: Modifier = Modifier,
     alarms: List<Alarm>,
     onCreateNewAlarm: () -> Unit = {},
+    onDeleteAlarm: (Alarm) -> Unit = {},
     onToggleAlarmActiveState: (Alarm) -> Unit = {},
 ) {
     Scaffold { padding ->
@@ -85,12 +87,14 @@ fun YourAlarmsScreenContent(
                     modifier = Modifier.weight(1f),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (alarms.isEmpty()) {
+                    androidx.compose.animation.AnimatedVisibility(alarms.isEmpty()) {
                         NoAlarmsView()
-                    } else {
+                    }
+                    androidx.compose.animation.AnimatedVisibility(alarms.isNotEmpty()) {
                         AlarmsList(
                             alarms = alarms,
-                            onToggleAlarmActiveState = onToggleAlarmActiveState
+                            onToggleAlarmActiveState = onToggleAlarmActiveState,
+                            onDeleteAlarm = onDeleteAlarm
                         )
                     }
                 }
@@ -119,7 +123,7 @@ private fun NoAlarmsView(modifier: Modifier = Modifier) {
             contentDescription = null
         )
         Text(
-            "It's empty! Add the first alarm so you don't miss an important moment!",
+            stringResource(R.string.no_alarms_set_description),
             modifier = Modifier.padding(top = 32.dp),
             style = MaterialTheme.typography.labelMedium.copy(
                 fontWeight = FontWeight.Medium,
