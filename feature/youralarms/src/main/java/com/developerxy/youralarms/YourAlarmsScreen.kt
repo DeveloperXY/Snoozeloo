@@ -26,6 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.developerxy.designsystem.component.SnoozelooFab
 import com.developerxy.designsystem.icon.SnoozelooIcons
 import com.developerxy.youralarms.ui.AlarmsList
+import com.developerxy.youralarms.ui.mockAlarms
+import com.developerxy.youralarms.ui.model.Alarm
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -40,6 +42,19 @@ fun YourAlarmsScreen(
         viewModel.loadAlarms()
     }
 
+    YourAlarmsScreenContent(
+        modifier = modifier,
+        alarms = alarms,
+        onCreateNewAlarm = onCreateNewAlarm
+    )
+}
+
+@Composable
+fun YourAlarmsScreenContent(
+    modifier: Modifier = Modifier,
+    alarms: List<Alarm>,
+    onCreateNewAlarm: () -> Unit = {},
+) {
     Scaffold { padding ->
         Box(
             modifier = modifier
@@ -111,10 +126,16 @@ private fun NoAlarmsView(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(name = "No alarms")
 @Composable
-fun YourAlarmsScreenPreview(modifier: Modifier = Modifier) {
-    YourAlarmsScreen(
-        onCreateNewAlarm = {},
+fun YourAlarmsScreenEmptyContentPreview(modifier: Modifier = Modifier) {
+    YourAlarmsScreenContent(
+        alarms = listOf()
     )
+}
+
+@Preview(name = "View of set alarms")
+@Composable
+fun YourAlarmsScreenContentPreview(modifier: Modifier = Modifier) {
+    YourAlarmsScreenContent(alarms = mockAlarms)
 }

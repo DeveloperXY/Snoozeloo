@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class YourAlarmsViewModel(
+open class YourAlarmsViewModel(
     private val fetchYourAlarms: FetchYourAlarmsUseCase
 ) : ViewModel() {
     private val _alarms = MutableStateFlow<List<Alarm>>(emptyList())

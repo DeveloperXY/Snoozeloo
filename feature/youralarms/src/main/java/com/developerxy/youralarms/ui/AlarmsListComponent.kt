@@ -1,5 +1,7 @@
 package com.developerxy.youralarms.ui
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -13,9 +15,15 @@ fun AlarmsList(
     modifier: Modifier = Modifier,
     alarms: List<Alarm>
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         items(alarms.size) {
-            Alarm(modifier = modifier.padding(horizontal = 16.dp))
+            Alarm(
+                modifier = modifier.padding(horizontal = 16.dp),
+                alarm = alarms[it]
+            )
         }
     }
 }
@@ -23,5 +31,5 @@ fun AlarmsList(
 @Preview
 @Composable
 fun AlarmsListPreview() {
-    AlarmsList(alarms = listOf())
+    AlarmsList(alarms = mockAlarms)
 }

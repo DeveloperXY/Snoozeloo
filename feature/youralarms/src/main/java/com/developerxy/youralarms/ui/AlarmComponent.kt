@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -27,87 +23,80 @@ import com.developerxy.designsystem.component.SnoozelooChip
 import com.developerxy.designsystem.component.SnoozelooSurface
 import com.developerxy.designsystem.component.SnoozelooSwitch
 import com.developerxy.designsystem.theme.SnoozelooTextGray
+import com.developerxy.youralarms.ui.model.Alarm as AlarmInfo
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Alarm(modifier: Modifier = Modifier) {
+fun Alarm(
+    modifier: Modifier = Modifier,
+    alarm: AlarmInfo
+) {
     SnoozelooSurface(modifier = modifier) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    "Wake Up",
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                Column(modifier = Modifier.weight(1f)) {
+                    if (alarm.name.isNotEmpty()) {
+                        Text(
+                            alarm.name,
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            alarm.displayTime(),
+                            modifier = Modifier.alignByBaseline(),
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 42.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            alarm.amOrPm(),
+                            modifier = Modifier.alignByBaseline(),
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 24.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        "Alarm in 30min", style = MaterialTheme.typography.labelMedium.copy(
+                            color = SnoozelooTextGray,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp
+                        )
                     )
-                )
+                }
+
                 SnoozelooSwitch()
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    "10:00",
-                    modifier = Modifier.alignByBaseline(),
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 42.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    "AM",
-                    modifier = Modifier.alignByBaseline(),
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                "Alarm in 30min", style = MaterialTheme.typography.labelMedium.copy(
-                    color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
-                )
-            )
             Spacer(modifier = Modifier.height(16.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                var firstChecked by rememberSaveable { mutableStateOf(false) }
-                SnoozelooChip(text = "Mo",
-                    selected = firstChecked,
-                    onClick = { firstChecked = !firstChecked })
-                var secondChecked by rememberSaveable { mutableStateOf(true) }
-                SnoozelooChip(text = "Tu",
-                    selected = secondChecked,
-                    onClick = { secondChecked = !secondChecked })
-                var thirdChecked by rememberSaveable { mutableStateOf(false) }
-                SnoozelooChip(text = "We",
-                    selected = thirdChecked,
-                    onClick = { thirdChecked = !thirdChecked })
-                var fourthChecked by rememberSaveable { mutableStateOf(true) }
-                SnoozelooChip(text = "Th",
-                    selected = fourthChecked,
-                    onClick = { fourthChecked = !fourthChecked })
-                var fifthChecked by rememberSaveable { mutableStateOf(false) }
-                SnoozelooChip(text = "Fr",
-                    selected = fifthChecked,
-                    onClick = { fifthChecked = !fifthChecked })
-                var sixthChecked by rememberSaveable { mutableStateOf(true) }
-                SnoozelooChip(text = "Sa",
-                    selected = sixthChecked,
-                    onClick = { sixthChecked = !sixthChecked })
-                var seventhChecked by rememberSaveable { mutableStateOf(false) }
-                SnoozelooChip(text = "Su",
-                    selected = seventhChecked,
-                    onClick = { seventhChecked = !seventhChecked })
+                val labels = listOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su")
+                val selectedDays = alarm.getSelectedDays()
+
+                labels.forEachIndexed { index, label ->
+                    SnoozelooChip(
+                        text = label,
+                        selected = selectedDays.contains(index),
+                        onClick = {}
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -120,8 +109,25 @@ fun Alarm(modifier: Modifier = Modifier) {
     }
 }
 
+private fun AlarmInfo.displayTime(): String {
+    return with(time) {
+        "${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}"
+    }
+}
+
+private fun AlarmInfo.amOrPm(): String {
+    return with(time) {
+        if (hours < 12) "AM" else "PM"
+    }
+}
+
+fun AlarmInfo.getSelectedDays(): List<Int> {
+    return (0 until 8)
+        .filter { (selectedDays.toInt() shr it) and 1 == 1 }
+}
+
 @Preview
 @Composable
 fun AlarmPreview() {
-    Alarm()
+    Alarm(alarm = mockAlarms[0])
 }
