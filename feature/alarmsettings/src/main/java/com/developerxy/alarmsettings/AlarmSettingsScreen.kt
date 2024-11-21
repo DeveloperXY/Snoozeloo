@@ -88,7 +88,11 @@ fun AlarmSettingsScreen(
                 ActionBar(
                     saveEnabled = saveEnabled,
                     onClose = navigateBack,
-                    onSave = alarmSettingsViewModel::saveNewAlarm
+                    onSave = {
+                        alarmSettingsViewModel.saveNewAlarm(
+                            onComplete = navigateBack
+                        )
+                    }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 

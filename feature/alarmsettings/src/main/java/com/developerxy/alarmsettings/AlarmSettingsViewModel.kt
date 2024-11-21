@@ -1,5 +1,6 @@
 package com.developerxy.alarmsettings
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerxy.data.repository.AlarmRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -118,7 +120,7 @@ class AlarmSettingsViewModel(
     }
 
     @Suppress("NAME_SHADOWING")
-    fun saveNewAlarm() {
+    fun saveNewAlarm(@MainThread onComplete: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val alarmTime = hours.value?.let { hours ->
                 minutes.value?.let { minutes ->
@@ -136,6 +138,9 @@ class AlarmSettingsViewModel(
                     ringtoneUri = _selectedRingtone.value.uri.toString()
                 )
                 alarmRepository.addAlarm(newAlarm)
+                withContext(Dispatchers.Main) {
+                    onComplete()
+                }
             }
         }
     }
