@@ -1,5 +1,6 @@
 package com.developerxy.youralarms.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -25,6 +26,8 @@ import com.developerxy.designsystem.component.SnoozelooChip
 import com.developerxy.designsystem.component.SnoozelooSurface
 import com.developerxy.designsystem.component.SnoozelooSwitch
 import com.developerxy.designsystem.theme.SnoozelooTextGray
+import com.developerxy.ui.amOrPm
+import com.developerxy.ui.formatAsDisplayTime
 import com.developerxy.youralarms.ui.model.Alarm as AlarmInfo
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -77,22 +80,24 @@ fun Alarm(
                         )
                     }
 
-                    if (alarm.isActive) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            "Alarm in 30min", style = MaterialTheme.typography.labelMedium.copy(
-                                color = SnoozelooTextGray,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp
+                    AnimatedVisibility(alarm.isActive && alarm.timeUntilNextOccurrence != null) {
+                        Column {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = alarm.timeUntilNextOccurrence.orEmpty(),
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    color = SnoozelooTextGray,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp
+                                )
                             )
-                        )
+                        }
                     }
                 }
 
                 SnoozelooSwitch(
                     checked = alarm.isActive,
                     onCheckedChange = {
-                        println(alarm)
                         currentOnToggleAlarmActiveState()
                     }
                 )
@@ -103,7 +108,7 @@ fun Alarm(
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 val labels = listOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su")
-                val selectedDays = alarm.getSelectedDays()
+                val selectedDays = alarm.selectedDays
 
                 labels.forEachIndexed { index, label ->
                     SnoozelooChip(
@@ -114,35 +119,24 @@ fun Alarm(
                 }
             }
 
-            if (alarm.isActive) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Go to bed at 02:00AM to get 8h of sleep",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
+            AnimatedVisibility(alarm.isActive && alarm.timeRequiredForXHoursOfSleep != null) {
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        alarm.timeRequiredForXHoursOfSleep.orEmpty(),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
+                        )
                     )
-                )
+                }
             }
         }
     }
 }
 
-private fun AlarmInfo.displayTime(): String {
-    return with(time) {
-        "${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}"
-    }
-}
+private fun AlarmInfo.displayTime(): String = formatAsDisplayTime(time.hours, time.minutes)
 
-private fun AlarmInfo.amOrPm(): String {
-    return with(time) {
-        if (hours < 12) "AM" else "PM"
-    }
-}
-
-fun AlarmInfo.getSelectedDays(): List<Int> {
-    return (0 until 8)
-        .filter { (selectedDays.toInt() shr it) and 1 == 1 }
-}
+private fun AlarmInfo.amOrPm(): String = amOrPm(time.hours)
 
 @Preview
 @Composable

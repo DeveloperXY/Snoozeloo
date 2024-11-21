@@ -1,5 +1,6 @@
 package com.developerxy.youralarms.ui
 
+import com.developerxy.ui.amOrPm
 import com.developerxy.youralarms.ui.model.AlarmTime
 
 val mockAlarms = listOf(
@@ -7,20 +8,24 @@ val mockAlarms = listOf(
         1,
         "Education",
         AlarmTime(23, 50),
-        "01000001".toInt(2).toByte(),
+        listOf(1, 6),
         60,
         true,
         null,
-        true
+        true,
+        "Alarm in 1d5h3min",
+        "Go to bed at 02:00AM to get 8 hours of sleep"
     ),
     com.developerxy.youralarms.ui.model.Alarm(
         2,
         "Rise and shine",
         AlarmTime(8, 35),
-        "01000101".toInt(2).toByte(),
+        listOf(1, 2, 4),
         50,
         false,
         null,
-        false
+        false,
+        null,
+        null
     ),
 )
