@@ -124,7 +124,9 @@ fun Alarm(
                     Text(
                         alarm.timeRequiredForXHoursOfSleep.orEmpty(),
                         style = MaterialTheme.typography.labelMedium.copy(
-                            color = SnoozelooTextGray, fontWeight = FontWeight.Medium, fontSize = 14.sp
+                            color = SnoozelooTextGray,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp
                         )
                     )
                 }

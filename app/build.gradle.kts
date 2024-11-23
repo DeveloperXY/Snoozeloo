@@ -5,6 +5,13 @@ plugins {
 
 android {
     namespace = "com.developerxy.snoozeloo"
+
+    kotlinOptions {
+        freeCompilerArgs += listOf(
+            "-P", "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${buildDir.absolutePath}/compose-metrics",
+            "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${buildDir.absolutePath}/compose-reports"
+        )
+    }
 }
 
 dependencies {
