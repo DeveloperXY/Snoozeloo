@@ -1,6 +1,5 @@
 package com.developerxy.youralarms.ui
 
-import com.developerxy.ui.amOrPm
 import com.developerxy.youralarms.ui.model.AlarmTime
 
 val mockAlarms = listOf(

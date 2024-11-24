@@ -2,9 +2,9 @@ package com.developerxy.youralarms
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.developerxy.ui.amOrPm
-import com.developerxy.ui.formatAsDisplayTime
-import com.developerxy.ui.toSelectedDaysList
+import com.developerxy.amOrPm
+import com.developerxy.formatAsDisplayTime
+import com.developerxy.toSelectedDaysList
 import com.developerxy.youralarms.domain.DeleteAlarmUseCase
 import com.developerxy.youralarms.domain.FetchYourAlarmsUseCase
 import com.developerxy.youralarms.domain.ToggleAlarmActiveStateUseCase

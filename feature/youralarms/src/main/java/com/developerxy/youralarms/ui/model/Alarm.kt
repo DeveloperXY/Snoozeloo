@@ -1,7 +1,7 @@
 package com.developerxy.youralarms.ui.model
 
-import com.developerxy.ui.toSelectedDaysByte
-import com.developerxy.ui.toSelectedDaysList
+import com.developerxy.toSelectedDaysByte
+import com.developerxy.toSelectedDaysList
 import com.developerxy.model.Alarm as DomainAlarm
 import com.developerxy.model.AlarmTime as DomainAlarmTime
 

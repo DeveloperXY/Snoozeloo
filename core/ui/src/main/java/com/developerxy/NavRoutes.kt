@@ -1,4 +1,4 @@
-package com.developerxy.ui
+package com.developerxy
 
 object NavRoute {
     const val YOUR_ALARMS = "your_alarms"

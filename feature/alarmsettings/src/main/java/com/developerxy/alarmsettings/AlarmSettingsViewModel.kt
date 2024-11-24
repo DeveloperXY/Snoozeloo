@@ -3,6 +3,7 @@ package com.developerxy.alarmsettings
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.developerxy.alarmsettings.domain.CreateNewAlarmUseCase
 import com.developerxy.data.repository.AlarmRepository
 import com.developerxy.model.Alarm
 import com.developerxy.model.AlarmTime
@@ -17,7 +18,7 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class AlarmSettingsViewModel(
-    private val alarmRepository: AlarmRepository
+    private val _createNewAlarm: CreateNewAlarmUseCase
 ) : ViewModel() {
     /**
      * This flag indicates whether the totality of alarm info currently set are valid
@@ -138,7 +139,7 @@ class AlarmSettingsViewModel(
                     ringtoneUri = _selectedRingtone.value.uri.toString(),
                     isActive = true
                 )
-                alarmRepository.addAlarm(newAlarm)
+                _createNewAlarm(newAlarm)
                 withContext(Dispatchers.Main) {
                     onComplete()
                 }

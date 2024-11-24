@@ -1,6 +1,6 @@
 package com.developerxy.di
 
-import com.developerxy.ui.RingtonesViewModel
+import com.developerxy.RingtonesViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

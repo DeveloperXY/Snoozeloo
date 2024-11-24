@@ -1,4 +1,4 @@
-package com.developerxy.ui
+package com.developerxy
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

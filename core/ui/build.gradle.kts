@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.snoozeloo.android.library)
+    alias(libs.plugins.snoozeloo.android.library.compose)
 }
 
 android {

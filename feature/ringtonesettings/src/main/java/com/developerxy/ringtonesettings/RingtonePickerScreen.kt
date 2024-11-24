@@ -25,7 +25,7 @@ import com.developerxy.designsystem.component.SnoozelooIconButton
 import com.developerxy.designsystem.icon.SnoozelooIcons
 import com.developerxy.ringtonesettings.ui.RingtoneItem
 import com.developerxy.ringtonesettings.ui.model.toUiModel
-import com.developerxy.ui.RingtonesViewModel
+import com.developerxy.RingtonesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapLatest

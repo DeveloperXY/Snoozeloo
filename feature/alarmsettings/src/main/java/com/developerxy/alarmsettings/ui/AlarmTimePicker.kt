@@ -42,7 +42,7 @@ fun AlarmTimePicker(
     var areHoursFocused by remember { mutableStateOf(false) }
     var areMinutesFocused by remember { mutableStateOf(false) }
 
-    SnoozelooSurface {
+    SnoozelooSurface(modifier = modifier) {
         Column(modifier = Modifier.padding(24.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

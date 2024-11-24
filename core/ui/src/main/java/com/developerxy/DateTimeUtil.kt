@@ -1,4 +1,4 @@
-package com.developerxy.ui
+package com.developerxy
 
 fun Byte.toSelectedDaysList(): List<Int> {
     return (0 until 8)

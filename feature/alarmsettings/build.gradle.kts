@@ -7,3 +7,7 @@ plugins {
 android {
     namespace = "com.developerxy.alarmsettings"
 }
+
+dependencies {
+    implementation(projects.core.domain)
+}

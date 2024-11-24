@@ -11,8 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.developerxy.alarmsettings.AlarmSettingsScreen
 import com.developerxy.ringtonesettings.RingtonePickerScreen
-import com.developerxy.ui.NavRoute
-import com.developerxy.ui.RingtonesViewModel
+import com.developerxy.NavRoute
+import com.developerxy.RingtonesViewModel
 import com.developerxy.youralarms.YourAlarmsScreen
 import org.koin.androidx.compose.koinViewModel
 

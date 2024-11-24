@@ -26,8 +26,8 @@ import com.developerxy.designsystem.component.SnoozelooChip
 import com.developerxy.designsystem.component.SnoozelooSurface
 import com.developerxy.designsystem.component.SnoozelooSwitch
 import com.developerxy.designsystem.theme.SnoozelooTextGray
-import com.developerxy.ui.amOrPm
-import com.developerxy.ui.formatAsDisplayTime
+import com.developerxy.amOrPm
+import com.developerxy.formatAsDisplayTime
 import com.developerxy.youralarms.ui.model.Alarm as AlarmInfo
 
 @OptIn(ExperimentalLayoutApi::class)
