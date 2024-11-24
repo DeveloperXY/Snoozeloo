@@ -8,6 +8,7 @@ import com.developerxy.database.di.databaseModule
 import com.developerxy.di.sharedAlarmSettingsModule
 import com.developerxy.domain.di.coreDomainModule
 import com.developerxy.ringtonesettings.di.ringtonePickerModule
+import com.developerxy.snoozeloo.di.appModule
 import com.developerxy.youralarms.di.yourAlarmsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -30,7 +31,7 @@ class SnoozelooApplication : Application() {
             val dataModules = arrayOf(databaseModule, daoModule, repositoryModule)
             val coreModules = arrayOf(coreDomainModule)
 
-            modules(*dataModules, *featureModules, *coreModules)
+            modules(appModule, *dataModules, *featureModules, *coreModules)
         }
     }
 }
