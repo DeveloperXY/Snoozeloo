@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.developerxy.alarmtrigger.FullScreenActivity
+import com.developerxy.alarmtrigger.AlarmTriggerActivity
 
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -27,7 +27,7 @@ class AlarmReceiver : BroadcastReceiver() {
         // Create the full-screen intent (to launch the activity)
         val intent = Intent(
             context,
-            FullScreenActivity::class.java
+            AlarmTriggerActivity::class.java
         )
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val fullScreenPendingIntent =
