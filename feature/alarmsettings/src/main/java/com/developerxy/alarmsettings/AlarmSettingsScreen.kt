@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.developerxy.RingtonesViewModel
 import com.developerxy.alarmsettings.ui.ActionBar
 import com.developerxy.alarmsettings.ui.AlarmName
@@ -44,7 +46,6 @@ import com.developerxy.alarmsettings.ui.AlarmVolume
 import com.developerxy.alarmsettings.ui.RepeatAlarm
 import com.developerxy.alarmsettings.ui.Vibrate
 import com.developerxy.alarmsettings.ui.dialog.AlarmNameDialog
-import com.developerxy.ui.OnResumeEffect
 import com.developerxy.ui.RegisterExactAlarmPermissionReceiver
 import com.developerxy.ui.canScheduleExactAlarms
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -96,7 +97,7 @@ fun AlarmSettingsScreen(
             hasScheduleExactAlarmPermission = it
         }
 
-        OnResumeEffect(hasScheduleExactAlarmPermission) {
+        LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
             if (hasScheduleExactAlarmPermission) {
                 snackbarHostState.currentSnackbarData?.dismiss()
             } else {

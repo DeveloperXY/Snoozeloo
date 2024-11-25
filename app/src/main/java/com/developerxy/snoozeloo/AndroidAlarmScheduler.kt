@@ -7,26 +7,32 @@ import android.content.Context
 import android.content.Intent
 import com.developerxy.data.AlarmScheduler
 import com.developerxy.model.Alarm
+import java.time.ZoneOffset
 
 class AndroidAlarmScheduler(private val context: Context) : AlarmScheduler {
 
+    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
     @SuppressLint("ScheduleExactAlarm")
     override fun schedule(alarm: Alarm) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val triggerTime = System.currentTimeMillis() + 5000
-        alarmManager.setExact(
+        val pendingIntent = alarm.asPendingIntent()
+        val nextTriggerDateTime = alarm.nextTriggerDateTime()
+
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            triggerTime,
+            nextTriggerDateTime.toEpochSecond(ZoneOffset.UTC),
             pendingIntent
         )
     }
 
     override fun cancel(alarm: Alarm) {
-
+        alarmManager.cancel(alarm.asPendingIntent())
     }
+
+    private fun Alarm.asPendingIntent() = PendingIntent.getBroadcast(
+        context,
+        id,
+        Intent(context, AlarmReceiver::class.java),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
 }
