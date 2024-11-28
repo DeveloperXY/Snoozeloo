@@ -16,8 +16,10 @@ internal class OfflineAlarmRepository(
             it.map(AlarmEntity::asDomainModel)
         }
 
-    override suspend fun addAlarm(alarm: Alarm) {
-        alarmDao.insertAll(alarm.toDatabaseEntity())
+    override suspend fun getAlarmById(id: Int) = alarmDao.getById(id).asDomainModel()
+
+    override suspend fun addAlarm(alarm: Alarm): Int {
+        return alarmDao.insert(alarm.toDatabaseEntity()).toInt()
     }
 
     override suspend fun updateAlarm(alarm: Alarm) {

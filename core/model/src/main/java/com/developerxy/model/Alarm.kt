@@ -1,9 +1,12 @@
 package com.developerxy.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+@Parcelize
 data class Alarm(
     val id: Int = 0,
     val name: String,
@@ -13,7 +16,7 @@ data class Alarm(
     val vibrate: Boolean,
     val ringtoneUri: String?,
     val isActive: Boolean
-) {
+): Parcelable {
     fun nextTriggerDateTime(): LocalDateTime {
         val repeatDays = selectedDays.toSelectedDaysList()
             .map { DayOfWeek.of(it + 1) }
@@ -63,7 +66,8 @@ data class Alarm(
     }
 }
 
+@Parcelize
 data class AlarmTime(
     val hours: Int,
     val minutes: Int,
-)
+) : Parcelable

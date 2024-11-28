@@ -9,7 +9,7 @@ class CreateNewAlarmUseCase(
     private val scheduleAlarm: ScheduleAlarmUseCase
 ) {
     suspend operator fun invoke(alarm: Alarm) {
-        alarmRepository.addAlarm(alarm)
-        scheduleAlarm(alarm)
+        val newAlarmId = alarmRepository.addAlarm(alarm)
+        scheduleAlarm(alarm.copy(id = newAlarmId))
     }
 }

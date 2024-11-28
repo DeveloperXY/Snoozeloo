@@ -9,6 +9,7 @@
     <application
         android:name=".SnoozelooApplication"
         android:allowBackup="true"
+        android:debuggable="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -32,9 +33,10 @@
         <activity
             android:name="com.developerxy.alarmtrigger.AlarmTriggerActivity"
             android:exported="true"
-            android:turnScreenOn="true"
+            android:label="FULL SCREEN"
+            android:launchMode="singleInstance"
             android:showWhenLocked="true"
-            android:label="FULL SCREEN" />
+            android:turnScreenOn="true" />
 
         <receiver
             android:name=".AlarmReceiver"

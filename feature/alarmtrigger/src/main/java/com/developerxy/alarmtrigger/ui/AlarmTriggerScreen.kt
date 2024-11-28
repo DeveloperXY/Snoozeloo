@@ -21,14 +21,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.developerxy.alarmtrigger.ui.model.Alarm
 import com.developerxy.designsystem.ButtonSize
 import com.developerxy.designsystem.component.SnoozelooFilledButton
 import com.developerxy.designsystem.component.SnoozelooOutlinedButton
 import com.developerxy.designsystem.icon.SnoozelooIcons
+import com.developerxy.formatAsDisplayTime
 
 @Composable
 fun AlarmTriggerScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    alarm: Alarm
 ) {
     Scaffold(modifier = modifier) { padding ->
         Box(
@@ -52,7 +55,7 @@ fun AlarmTriggerScreen(
                 )
                 Spacer(Modifier.height(36.dp))
                 Text(
-                    "10:00",
+                    formatAsDisplayTime(alarm.time.hours, alarm.time.minutes),
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 82.sp,
@@ -61,7 +64,7 @@ fun AlarmTriggerScreen(
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "WORK",
+                    alarm.name,
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 26.sp,
@@ -88,5 +91,5 @@ fun AlarmTriggerScreen(
 @Preview
 @Composable
 fun AlarmTriggerScreenPreview(modifier: Modifier = Modifier) {
-    AlarmTriggerScreen()
+//    AlarmTriggerScreen()
 }

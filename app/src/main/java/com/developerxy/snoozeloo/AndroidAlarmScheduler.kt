@@ -32,7 +32,9 @@ class AndroidAlarmScheduler(private val context: Context) : AlarmScheduler {
     private fun Alarm.asPendingIntent() = PendingIntent.getBroadcast(
         context,
         id,
-        Intent(context, AlarmReceiver::class.java),
+        Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("alarm_id", id)
+        },
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 }

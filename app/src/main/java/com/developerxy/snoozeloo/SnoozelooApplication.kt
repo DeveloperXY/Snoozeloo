@@ -2,6 +2,7 @@ package com.developerxy.snoozeloo
 
 import android.app.Application
 import com.developerxy.alarmsettings.di.alarmSettingsModule
+import com.developerxy.alarmtrigger.di.alarmTriggerModule
 import com.developerxy.data.di.repositoryModule
 import com.developerxy.database.di.daoModule
 import com.developerxy.database.di.databaseModule
@@ -26,6 +27,7 @@ class SnoozelooApplication : Application() {
                 yourAlarmsModule,
                 alarmSettingsModule,
                 ringtonePickerModule,
+                alarmTriggerModule,
                 sharedAlarmSettingsModule,
             )
             val dataModules = arrayOf(databaseModule, daoModule, repositoryModule)

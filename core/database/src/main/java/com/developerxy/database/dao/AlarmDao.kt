@@ -13,8 +13,11 @@ interface AlarmDao {
     @Query("SELECT * FROM alarms")
     fun getAll(): Flow<List<AlarmEntity>>
 
+    @Query("SELECT * FROM alarms WHERE id = :id")
+    suspend fun getById(id: Int): AlarmEntity
+
     @Insert
-    suspend fun insertAll(vararg alarms: AlarmEntity)
+    suspend fun insert(alarm: AlarmEntity): Long
 
     @Update
     suspend fun update(alarm: AlarmEntity): Int

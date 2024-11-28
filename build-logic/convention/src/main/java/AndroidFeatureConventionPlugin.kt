@@ -14,6 +14,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:data"))
+                "implementation"(project(":core:domain"))
                 "implementation"(project(":core:designsystem"))
 
                 "implementation"(platform(libs.findLibrary("koin.bom").get()))
